@@ -133,5 +133,5 @@ $RECYCLE.BIN/
 _NCrunch*
 
 ## Other
-TPUM/.vs/*
-TPUM/.idea
+.vs
+.idea

@@ -5,6 +5,8 @@ namespace Data
 {
 	class Shop : IShop
 	{
+		private Dictionary<Guid, IItem> items;
+		
 		public List<IItem> GetItems()
 		{
 			throw new NotImplementedException();
