@@ -1,17 +1,18 @@
 ﻿namespace Data
 {
-	public class DataApi : DataAbstractApi
+	internal class DataApi : DataAbstractApi
 	{
-		private readonly Shop shop;
+		private readonly Warehouse warehouse;
 
 		public DataApi()
 		{
-			shop = new Shop();
+			warehouse = new Warehouse();
 		}
 
-		public override IShop GetShop()
+		public override IWarehouse GetWarehouse()
 		{
-			return shop;
+			return warehouse;
 		}
+
 	}
 }
