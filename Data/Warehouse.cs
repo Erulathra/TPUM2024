@@ -43,7 +43,7 @@ namespace Data
 				await Task.Delay((int)Math.Truncate(waitSeconds * 1000f));
 				
 				// from 0.5 to 1.5
-				float inflation = (float)random.NextDouble() * + 0.5f;
+				float inflation = (float)random.NextDouble() + 0.5f;
 
 				lock (itemsLock)
 				{
@@ -57,7 +57,7 @@ namespace Data
 
 				lock (inflationLock)
 				{
-					if (enableInflation)
+					if (!enableInflation)
 					{
 						break;
 					}

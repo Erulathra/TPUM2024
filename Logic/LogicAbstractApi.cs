@@ -4,6 +4,21 @@ using Data;
 
 namespace Logic
 {
+	public class LogicInflationChangedEventArgs : EventArgs
+	{
+	    public float NewInflation { get; }
+
+	    public LogicInflationChangedEventArgs(float newInflation)
+	    {
+		    this.NewInflation = newInflation;
+	    }
+
+	    internal LogicInflationChangedEventArgs(InflationChangedEventArgs args)
+	    {
+		    this.NewInflation = args.NewInflation;
+	    }
+	}
+	
 	public enum LogicItemType 
 	{
 		Potion = 0,
@@ -26,6 +41,8 @@ namespace Logic
 
 	public interface IShop
 	{
+		public event EventHandler<LogicInflationChangedEventArgs> InflationChanged;
+		
 	    public void SellItem(Guid itemId);
 	    
 	    public List<IShopItem> GetItems();

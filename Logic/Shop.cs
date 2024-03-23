@@ -8,10 +8,19 @@ namespace Logic
 	class Shop : IShop
 	{
 		private readonly IWarehouse warehouse;
+		
+		public event EventHandler<LogicInflationChangedEventArgs>? InflationChanged;
 
 		public Shop(IWarehouse warehouse)
 		{
 			this.warehouse = warehouse;
+
+			warehouse.InflationChanged += HandleOnInflationChanged;
+		}
+
+		private void HandleOnInflationChanged(object sender, InflationChangedEventArgs args)
+		{
+			InflationChanged?.Invoke(this, new LogicInflationChangedEventArgs(args));
 		}
 
 		public void SellItem(Guid itemId)

@@ -11,6 +11,6 @@
         <vm:ViewModel/>
     </Window.DataContext>
     <Grid>
-        
+       <TextBlock Padding="10px" Text="{Binding InflationString}"/>
     </Grid>
 </Window>
