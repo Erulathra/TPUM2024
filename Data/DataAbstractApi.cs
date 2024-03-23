@@ -11,7 +11,7 @@ namespace Data
 		Helmet = 3
 	}
 	
-    public interface IItem
+    public interface IItem : ICloneable
     {
         Guid Id { get; }
         string Name { get; }
@@ -25,6 +25,9 @@ namespace Data
     
     public interface IWarehouse
     {
+	    /** Called when inflation changes */
+	    public event EventHandler<InflationChangedEventArgs> InflationChanged;
+	    
 	    public IItem CreateItem(string name, string description, ItemType type, float price);
 
 	    public void SellItem(Guid itemId);
@@ -48,5 +51,15 @@ namespace Data
 	    }
 
 	    public abstract IWarehouse GetWarehouse();
+    }
+
+    public class InflationChangedEventArgs : EventArgs
+    {
+	    public float NewInflation { get; }
+
+	    public InflationChangedEventArgs(float newInflation)
+	    {
+		    this.NewInflation = newInflation;
+	    }
     }
 }

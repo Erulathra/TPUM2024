@@ -1,4 +1,7 @@
+using System.Collections.Generic;
+using System.Linq;
 using Data;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace DataTest
 {
@@ -43,7 +46,7 @@ namespace DataTest
             List<IItem> items = data.GetWarehouse().GetItems();
             IItem testItem = items[0];
             
-            Assert.AreSame(testItem, data.GetWarehouse().GetItemByID(testItem.Id));
+            Assert.AreEqual(testItem, data.GetWarehouse().GetItemByID(testItem.Id));
         }
 
         [TestMethod]
@@ -79,6 +82,24 @@ namespace DataTest
             {
                 Assert.AreEqual(item.Type, ItemType.Potion);
             }
+        }
+
+        [TestMethod]
+        public void CloneTest()
+        {
+            DataAbstractApi data = PrepareData();
+            IItem item = data.GetWarehouse().GetItems().First();
+            IItem clone = (IItem) item.Clone();
+            
+            Assert.AreNotSame(item, clone);
+            Assert.AreNotSame(item.Name, clone.Name);
+            Assert.AreNotSame(item.Description, clone.Description);
+            
+            Assert.AreEqual(item.Id, clone.Id);
+            Assert.AreEqual(item.Name, clone.Name);
+            Assert.AreEqual(item.Description, clone.Description);
+            Assert.AreEqual(item.IsSold, clone.IsSold);
+            Assert.AreEqual(item.Type, clone.Type);
         }
     }
 }
