@@ -12,13 +12,27 @@
     </Window.DataContext>
     <Grid>
         <TextBlock Padding="10px" Text="{Binding InflationString}"/>
-        <ListBox Margin="181,69,57,29">
-
-        </ListBox>
         <Button x:Name="AllButton" Command="{Binding OnAllButtonCommand}" Content="All" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top"/>
         <Button x:Name="PotionsButton" Command="{Binding OnPotionsButtonCommand}" Content="Potions" HorizontalAlignment="Left" Margin="33,30,0,0" VerticalAlignment="Top"/>
         <Button x:Name="SwordsButton" Command="{Binding OnSwordsButtonCommand}" HorizontalAlignment="Left" Margin="81,30,0,0" VerticalAlignment="Top" Height="20" Width="47" Content="Swords"/>
         <Button x:Name="ArmorsButton" Command="{Binding OnArmorsButtonCommand}" Content="Armors" HorizontalAlignment="Left" Margin="133,30,0,0" VerticalAlignment="Top"/>
         <Button x:Name="HelmetsButton" Command="{Binding OnHelmetsButtonCommand}" Content="Helmets" HorizontalAlignment="Left" Margin="181,30,0,0" VerticalAlignment="Top"/>
+        <StackPanel Margin="10,68,0,0" Orientation="Vertical">
+            <ItemsControl ItemsSource="{Binding Items}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                            <StackPanel Orientation="Vertical" Margin="0,0,10,0" Width="207" Background="#FFF4F4F4">
+                                <Label Content="{Binding Name}" FontWeight="Bold"/>
+                                <Label Content="{Binding Description}"/>
+                            </StackPanel>
+                            <Button Width="90" Height="25" Content="{Binding Price, StringFormat={}{0:0.##}}" 
+                                Command="{Binding DataContext.OnItemButtonCommand, Mode=Default, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" 
+                                CommandParameter="{Binding Id}"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </StackPanel>
     </Grid>
 </Window>

@@ -41,6 +41,11 @@ namespace Model
             this.warehousePresentation = new WarehousePresentation(this.logicAbstractApi.GetShop());
         }
 
+        public void SellItem(Guid itemId)
+        {
+            logicAbstractApi.GetShop().SellItem(itemId);
+        }
+
         public void HandleInflationChanged(object sender, LogicInflationChangedEventArgs args)
         {
 	        InflationChanged?.Invoke(this, new ModelInflationChangedEventArgs(args));

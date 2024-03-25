@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
+using GalaSoft.MvvmLight.Command;
 using Model;
 
 namespace ViewModel
@@ -47,11 +48,14 @@ namespace ViewModel
             model.InflationChanged += HandleInflationChanged;
             Items = new ObservableCollection<ItemPresentation>(model.warehousePresentation.GetAvailableItems());
 
+            
             OnAllButtonCommand = new RelayCommand(() => HandleOnAllButton());
             OnPotionsButtonCommand = new RelayCommand(() => HandleOnPotionsButton());
             OnSwordsButtonCommand = new RelayCommand(() => HandleOnSwordsButton());
             OnArmorsButtonCommand = new RelayCommand(() => HandleOnArmorsButton());
             OnHelmetsButtonCommand = new RelayCommand(() => HandleOnHelmetsButton());
+
+            OnItemButtonCommand = new RelayCommand<Guid>((id) => HandleOnItemButton(id));
         }
 
         private void HandleInflationChanged(object sender, ModelInflationChangedEventArgs args)
@@ -97,6 +101,14 @@ namespace ViewModel
             items.Clear();
             model.warehousePresentation.GetItemsByType(PresentationItemType.Helmet).ToList().ForEach(items.Add);
             PrintItems();
+        }
+
+        public ICommand OnItemButtonCommand { get; private set; }
+        private void HandleOnItemButton(Guid id)
+        {
+            model.SellItem(id);
+            ItemPresentation item = items.ToList().Find(item => item.Id == id);
+            Console.Out.WriteLine($"Sold: {id}, {item.Name}, {item.Description}");
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
