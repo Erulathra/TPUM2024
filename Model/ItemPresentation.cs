@@ -14,6 +14,7 @@ namespace Model
         public PresentationItemType Type { get; private set; }
         public float Price { get; private set; }
         public bool IsSold { get; set; }
+        public bool IsNotSold { get => !IsSold; } // Needed in XAML
 
         public ItemPresentation(IShopItem item)
         {

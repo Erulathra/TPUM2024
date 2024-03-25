@@ -46,10 +46,11 @@ namespace ViewModel
         {
             this.model = new Model.Model(null);
             model.InflationChanged += HandleInflationChanged;
-            Items = new ObservableCollection<ItemPresentation>(model.warehousePresentation.GetAvailableItems());
+            Items = new ObservableCollection<ItemPresentation>(model.warehousePresentation.GetItems());
 
             
             OnAllButtonCommand = new RelayCommand(() => HandleOnAllButton());
+            OnAvailableButtonCommand = new RelayCommand(() => HandleOnAvailableButton());
             OnPotionsButtonCommand = new RelayCommand(() => HandleOnPotionsButton());
             OnSwordsButtonCommand = new RelayCommand(() => HandleOnSwordsButton());
             OnArmorsButtonCommand = new RelayCommand(() => HandleOnArmorsButton());
@@ -65,6 +66,14 @@ namespace ViewModel
 
         public ICommand OnAllButtonCommand { get; private set; }
         private void HandleOnAllButton()
+        {
+            items.Clear();
+            model.warehousePresentation.GetItems().ToList().ForEach(items.Add);
+            PrintItems();
+        }
+
+        public ICommand OnAvailableButtonCommand { get; private set; }
+        private void HandleOnAvailableButton()
         {
             items.Clear();
             model.warehousePresentation.GetAvailableItems().ToList().ForEach(items.Add);
