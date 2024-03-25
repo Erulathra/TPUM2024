@@ -6,11 +6,19 @@
         xmlns:vm="clr-namespace:ViewModel;assembly=ViewModel"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    
+
     <Window.DataContext>
         <vm:ViewModel/>
     </Window.DataContext>
     <Grid>
-       <TextBlock Padding="10px" Text="{Binding InflationString}"/>
+        <TextBlock Padding="10px" Text="{Binding InflationString}"/>
+        <ListBox Margin="181,69,57,29">
+
+        </ListBox>
+        <Button x:Name="AllButton" Command="{Binding OnAllButtonCommand}" Content="All" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top"/>
+        <Button x:Name="PotionsButton" Command="{Binding OnPotionsButtonCommand}" Content="Potions" HorizontalAlignment="Left" Margin="33,30,0,0" VerticalAlignment="Top"/>
+        <Button x:Name="SwordsButton" Command="{Binding OnSwordsButtonCommand}" HorizontalAlignment="Left" Margin="81,30,0,0" VerticalAlignment="Top" Height="20" Width="47" Content="Swords"/>
+        <Button x:Name="ArmorsButton" Command="{Binding OnArmorsButtonCommand}" Content="Armors" HorizontalAlignment="Left" Margin="133,30,0,0" VerticalAlignment="Top"/>
+        <Button x:Name="HelmetsButton" Command="{Binding OnHelmetsButtonCommand}" Content="Helmets" HorizontalAlignment="Left" Margin="181,30,0,0" VerticalAlignment="Top"/>
     </Grid>
 </Window>
