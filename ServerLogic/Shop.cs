@@ -5,7 +5,7 @@ using Data;
 
 namespace Logic
 {
-	class Shop : IShop
+	internal class Shop : IShop
 	{
 		private readonly IWarehouse warehouse;
 		

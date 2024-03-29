@@ -11,7 +11,10 @@
         <vm:ViewModel/>
     </Window.DataContext>
     <Grid>
-        <TextBlock Padding="10px" Text="{Binding InflationString}" Margin="327,4,0,0"/>
+        <Grid>
+            <TextBlock Padding="10px" Text="{Binding InflationString}" Margin="327,4,0,0"/>
+            <TextBlock Padding="10px" Text="{Binding ConnectionString}" Margin="700,4,0,0"/>
+        </Grid>
         <Label Content="Sort By:" Margin="0,10,10,30"/>
         <Button x:Name="AllButton" Command="{Binding OnAllButtonCommand}" Content="All" HorizontalAlignment="Left" Margin="52,13,0,0" VerticalAlignment="Top" Height="19"/>
         <Button x:Name="AvailableButton" Command="{Binding OnAvailableButtonCommand}" Content="Available" HorizontalAlignment="Left" Margin="75,13,0,0" VerticalAlignment="Top" Height="19"/>

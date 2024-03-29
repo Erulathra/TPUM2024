@@ -2,7 +2,7 @@
 
 namespace Data
 {
-	public class Item : IItem, ICloneable
+	internal class Item : IItem, ICloneable
 	{
 		public Guid Id { get; }
 		public string Name { get; private set; }

@@ -4,7 +4,7 @@ using Data;
 namespace Logic
 {
 	
-	public class Logic : LogicAbstractApi
+	internal class Logic : LogicAbstractApi
 	{
 		private readonly IShop shop;
 

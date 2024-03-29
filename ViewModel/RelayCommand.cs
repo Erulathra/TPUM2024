@@ -7,25 +7,20 @@ namespace ViewModel
     {
         private readonly Action execute;
 
-        private readonly Func<bool> canExecute;
+        private readonly Func<bool>? canExecute;
 
         public RelayCommand(Action execute)
             : this(execute, null)
         {
         }
 
-        public RelayCommand(Action execute, Func<bool> canExecute)
+        public RelayCommand(Action execute, Func<bool>? canExecute)
         {
-            if (execute == null)
-            {
-                throw new ArgumentNullException("execute");
-            }
-
             this.execute = execute;
             this.canExecute = canExecute;
         }
 
-        public event EventHandler CanExecuteChanged;
+        public event EventHandler? CanExecuteChanged;
 
         internal void RaiseCanExecuteChanged()
         {
@@ -47,25 +42,20 @@ namespace ViewModel
     {
         private readonly Action<T> execute;
 
-        private readonly Predicate<T> canExecute;
+        private readonly Predicate<T>? canExecute;
 
         public RelayCommand(Action<T> execute)
             : this(execute, null)
         {
         }
 
-        public RelayCommand(Action<T> execute, Predicate<T> canExecute)
+        public RelayCommand(Action<T> execute, Predicate<T>? canExecute)
         {
-            if (execute == null)
-            {
-                throw new ArgumentNullException("execute");
-            }
-
             this.execute = execute;
             this.canExecute = canExecute;
         }
 
-        public event EventHandler CanExecuteChanged;
+        public event EventHandler? CanExecuteChanged;
 
         internal void RaiseCanExecuteChanged()
         {

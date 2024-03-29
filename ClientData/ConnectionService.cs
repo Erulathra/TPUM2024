@@ -1,0 +1,46 @@
+﻿using System;
+using System.Diagnostics;
+using System.Net.WebSockets;
+using System.Threading.Tasks;
+
+namespace ClientData
+{
+	internal class ConnectionService : IConnectionService
+	{
+		public event Action<string>? Logger;
+		public event Action? OnConnectionStateChanged;
+
+		public event Action<string>? OnMessage;
+		
+		internal WebSocketConnection? WebSocketConnection { get; private set; }
+		public async Task Connect(Uri peerUri)
+		
+		{
+			try
+			{
+				Logger?.Invoke($"Connecting to {peerUri}");
+				WebSocketConnection = await WebSocketClient.Connect(peerUri, Logger);
+				OnConnectionStateChanged?.Invoke();
+				WebSocketConnection.OnMessage = (message) => OnMessage?.Invoke(message);
+			}
+			catch (WebSocketException exception)
+			{
+				Logger?.Invoke($"WebSocked exception: {exception.Message}");
+			}
+		}
+
+		public async Task Disconnect()
+		{
+			if (WebSocketConnection != null)
+			{
+				await WebSocketConnection.DisconnectAsync();
+			}
+		}
+
+		public bool IsConnected()
+		{
+			return WebSocketConnection != null;
+		}
+
+	}
+}

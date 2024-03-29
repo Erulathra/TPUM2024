@@ -29,16 +29,18 @@ namespace Model
     public class Model
     {
         private LogicAbstractApi logicAbstractApi;
+        public WarehousePresentation WarehousePresentation { get; private set; }
         
-        public WarehousePresentation warehousePresentation { get; private set; }
+        public ModelConnectionService ModelConnectionService { get; private set; }
 
         public event EventHandler<ModelInflationChangedEventArgs>? InflationChanged;
 
         public Model(LogicAbstractApi? logicAbstractApi)
         {
-            this.logicAbstractApi = logicAbstractApi == null ? LogicAbstractApi.Create() : logicAbstractApi;
+            this.logicAbstractApi = logicAbstractApi ?? LogicAbstractApi.Create();
             this.logicAbstractApi.GetShop().InflationChanged += HandleInflationChanged;
-            this.warehousePresentation = new WarehousePresentation(this.logicAbstractApi.GetShop());
+            this.WarehousePresentation = new WarehousePresentation(this.logicAbstractApi.GetShop());
+            this.ModelConnectionService = new ModelConnectionService(this.logicAbstractApi.GetConnectionService());
         }
 
         public void SellItem(Guid itemId)
@@ -50,6 +52,5 @@ namespace Model
         {
 	        InflationChanged?.Invoke(this, new ModelInflationChangedEventArgs(args));
         }
-
     }
 }

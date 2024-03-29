@@ -3,7 +3,7 @@ using Data;
 
 namespace Logic
 {
-	class ShopItem : IShopItem
+	internal class ShopItem : IShopItem
 	{
 		public Guid Id { get; private set; }
 		public string Name { get; private set; }

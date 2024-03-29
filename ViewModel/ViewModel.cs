@@ -52,15 +52,30 @@ namespace ViewModel
             }
         }
 
-        private string inflatcionString;
+        private string inflationString;
         public string InflationString
         {
-            get => inflatcionString;
+            get => inflationString;
             private set
             {
-                if (inflatcionString != value)
+                if (inflationString != value)
                 {
-                    inflatcionString = value;
+                    inflationString = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private string connectionString;
+
+        public string ConnectionString
+        {
+            get => connectionString;
+            private set
+            {
+                if (connectionString != value)
+                {
+                    connectionString = value;
                     OnPropertyChanged();
                 }
             }
@@ -68,11 +83,19 @@ namespace ViewModel
 
         public ViewModel()
         {
-            this.model = new Model.Model(null);
+            model = new Model.Model(null);
             model.InflationChanged += HandleInflationChanged;
+            model.ModelConnectionService.OnConnectionStateChanged += OnConnectionStateChanged;
+            model.ModelConnectionService.Logger += Log;
+
+            connectionString = "disconnected";
+            model.ModelConnectionService.Connect(new Uri(@"ws://localhost:21370"));
 
             CurrentTab = CurrentTabEnum.All;
-            Items = new ObservableCollection<ItemPresentation>(model.warehousePresentation.GetItems());
+            items = new ObservableCollection<ItemPresentation>();
+            Items = new ObservableCollection<ItemPresentation>(model.WarehousePresentation.GetItems());
+            
+            inflationString = "n/a";
 
             OnAllButtonCommand = new RelayCommand(() => HandleOnAllButton());
             OnAvailableButtonCommand = new RelayCommand(() => HandleOnAvailableButton());
@@ -81,9 +104,17 @@ namespace ViewModel
             OnArmorsButtonCommand = new RelayCommand(() => HandleOnArmorsButton());
             OnHelmetsButtonCommand = new RelayCommand(() => HandleOnHelmetsButton());
 
-
-
             OnItemButtonCommand = new RelayCommand<Guid>((id) => HandleOnItemButton(id));
+        }
+
+        private void Log(string message)
+        {
+            Console.WriteLine(message);
+        }
+
+        private void OnConnectionStateChanged()
+        {
+            ConnectionString = model.ModelConnectionService.IsConnected() ? "Connected" : "Disconnected";
         }
 
         private void HandleInflationChanged(object sender, ModelInflationChangedEventArgs args)
@@ -147,19 +178,19 @@ namespace ViewModel
 
             if (CurrentTab == CurrentTabEnum.All)
             {
-                model.warehousePresentation.GetItems().ToList().ForEach(items.Add);
+                model.WarehousePresentation.GetItems().ToList().ForEach(items.Add);
             }
             else if (CurrentTab == CurrentTabEnum.Available)
             {
-                model.warehousePresentation.GetAvailableItems().ToList().ForEach(items.Add);
+                model.WarehousePresentation.GetAvailableItems().ToList().ForEach(items.Add);
             }
             else
             {
-                model.warehousePresentation.GetItemsByType((PresentationItemType)CurrentTab).ToList().ForEach(items.Add);
+                model.WarehousePresentation.GetItemsByType((PresentationItemType)CurrentTab).ToList().ForEach(items.Add);
             }
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
         protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
