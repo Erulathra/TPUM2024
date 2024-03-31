@@ -40,6 +40,19 @@ namespace ClientApi
 	}
 
 	[Serializable]
+	public struct NewPriceDTO
+	{
+		public Guid ItemID;
+		public float NewPrice;
+
+		public NewPriceDTO(Guid itemId, float newPrice)
+		{
+			ItemID = itemId;
+			NewPrice = newPrice;
+		}
+	}
+
+	[Serializable]
 	public abstract class ServerResponse
 	{
 		public string Header { get; private set; }
@@ -53,13 +66,28 @@ namespace ClientApi
 	[Serializable]
 	public class UpdateAllResponse : ServerResponse
 	{
-		public static readonly string UpdateAllItemsHeader = "UpdateAllItems";
+		public static readonly string StaticHeader = "UpdateAllItems";
 
-		public ItemDTO[] Items;
+		public ItemDTO[]? Items;
 
 		public UpdateAllResponse()
-			: base(UpdateAllItemsHeader)
+			: base(StaticHeader)
 		{
 		}
+	}
+
+	[Serializable]
+	public class InflationChangedResponse : ServerResponse
+	{
+		public static readonly string StaticHeader = "InflationChanged";
+
+		public float NewInflation;
+		public NewPriceDTO[]? NewPrices;
+
+		public InflationChangedResponse()
+			: base(StaticHeader)
+		{
+		}
+		
 	}
 }

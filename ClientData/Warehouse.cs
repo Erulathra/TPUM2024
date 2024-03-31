@@ -27,22 +27,53 @@ namespace ClientData
 		private void OnMessage(string message)
 		{
 			Serializer serializer = Serializer.Create();
-
-			if (serializer.GetResponseHeader(message) == UpdateAllResponse.UpdateAllItemsHeader)
+			
+			if (serializer.GetResponseHeader(message) == UpdateAllResponse.StaticHeader)
 			{
 				UpdateAllResponse response = serializer.Deserialize<UpdateAllResponse>(message);
+				UpdateAllProducts(response);
+			}
+			else if (serializer.GetResponseHeader(message) == InflationChangedResponse.StaticHeader)
+			{
+				InflationChangedResponse response = serializer.Deserialize<InflationChangedResponse>(message);
+				UpdateAllPrices(response);
+			}
+		}
 
-				lock (itemsLock)
+		private void UpdateAllProducts(UpdateAllResponse response)
+		{
+			if (response.Items == null)
+				return;
+
+			lock (itemsLock)
+			{
+				items.Clear();
+				foreach (ItemDTO item in response.Items)
 				{
-					items.Clear();
-					foreach (ItemDTO item in response.Items)
+					items.Add(item.Id, item.ToItem());
+				}
+			}
+
+			ItemsUpdated?.Invoke();
+		}
+		
+		private void UpdateAllPrices(InflationChangedResponse response)
+		{
+			if (response.NewPrices == null)
+				return;
+
+			lock (itemsLock)
+			{
+				foreach (var newPrice in response.NewPrices)
+				{
+					if (items.ContainsKey(newPrice.ItemID))
 					{
-						items.Add(item.Id, item.ToItem());
+						items[newPrice.ItemID].Price = newPrice.NewPrice;
 					}
 				}
-
-				ItemsUpdated?.Invoke();
 			}
+			
+			InflationChanged?.Invoke(this, new InflationChangedEventArgs(response.NewInflation));
 		}
 
 		public async Task RequestItems()

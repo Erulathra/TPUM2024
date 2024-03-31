@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using ClientApi;
-using Data;
 using Logic;
 
 namespace ServerPresentation
@@ -16,7 +16,9 @@ namespace ServerPresentation
 		private Program(LogicAbstractApi logicAbstractApi)
 		{
 			this.logicAbstractApi = logicAbstractApi;
+			logicAbstractApi.GetShop().InflationChanged += HandleInflationChanged;
 		}
+
 
 		private async Task StartConnection()
 		{
@@ -52,25 +54,39 @@ namespace ServerPresentation
 
 		private async Task SendItems()
 		{
-			if (webSocketConnection != null)
-			{
-				Console.WriteLine($"Sending items...");
+			if (webSocketConnection == null)
+				return;
 
-				UpdateAllResponse serverResponse = new UpdateAllResponse();
-				
-				List<ItemDTO> itemDtos = new List<ItemDTO>();
-				foreach (IShopItem item in logicAbstractApi.GetShop().GetItems())
-				{
-					itemDtos.Add(item.ToDTO());
-				}
-				serverResponse.Items = itemDtos.ToArray();
-				
-				Serializer serializer = Serializer.Create();
-				string responseJson = serializer.Serialize(serverResponse);
-				Console.WriteLine(responseJson);
-				
-				await webSocketConnection.SendAsync(responseJson);
-			}
+			Console.WriteLine($"Sending items...");
+
+			UpdateAllResponse serverResponse = new UpdateAllResponse();
+			List<IShopItem> items = logicAbstractApi.GetShop().GetItems();
+			serverResponse.Items = items.Select(x => x.ToDTO()).ToArray();
+
+			Serializer serializer = Serializer.Create();
+			string responseJson = serializer.Serialize(serverResponse);
+			Console.WriteLine(responseJson);
+
+			await webSocketConnection.SendAsync(responseJson);
+		}
+		
+		private async void HandleInflationChanged(object? sender, LogicInflationChangedEventArgs args)
+		{
+			if (webSocketConnection == null)
+				return;
+			
+			Console.WriteLine($"New inflation: {args.NewInflation}");
+
+			List<IShopItem> items = logicAbstractApi.GetShop().GetItems();
+			InflationChangedResponse inflationChangedResponse = new InflationChangedResponse();
+			inflationChangedResponse.NewInflation = args.NewInflation;
+			inflationChangedResponse.NewPrices = items.Select(x => new NewPriceDTO(x.Id, x.Price)).ToArray();
+
+			Serializer serializer = Serializer.Create();
+			string responseJson = serializer.Serialize(inflationChangedResponse);
+			Console.WriteLine(responseJson);
+
+			await webSocketConnection.SendAsync(responseJson);
 		}
 
 		private void OnError()
