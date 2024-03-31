@@ -46,10 +46,11 @@ namespace Logic
 		
 	    /** Called when items array changed */
 	    public event Action? ItemsUpdated;
+		public event Action<bool>? TransactionFinish;
 
 	    public void RequestUpdate();
 		
-	    public void SellItem(Guid itemId);
+	    public Task SellItem(Guid itemId);
 	    
 	    public List<IShopItem> GetItems();
 	    public List<IShopItem> GetAvailableItems();

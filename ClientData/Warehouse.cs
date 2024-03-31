@@ -13,6 +13,7 @@ namespace ClientData
 
 		public event EventHandler<InflationChangedEventArgs>? InflationChanged;
 		public event Action? ItemsUpdated;
+		public event Action<bool>? TransactionFinish;
 
 
 		private readonly IConnectionService connectionService;
@@ -21,7 +22,6 @@ namespace ClientData
 		{
 			this.connectionService = connectionService;
 			this.connectionService.OnMessage += OnMessage;
-			
 		}
 
 		private void OnMessage(string message)
@@ -37,6 +37,19 @@ namespace ClientData
 			{
 				InflationChangedResponse response = serializer.Deserialize<InflationChangedResponse>(message);
 				UpdateAllPrices(response);
+			}
+			else if (serializer.GetResponseHeader(message) == TransactionResponse.StaticHeader)
+			{
+				TransactionResponse response = serializer.Deserialize<TransactionResponse>(message);
+				if (response.Succeeded)
+				{
+					RequestItems();
+					TransactionFinish?.Invoke(true);
+				}
+				else
+				{
+					TransactionFinish?.Invoke(false);
+				}
 			}
 		}
 
@@ -79,7 +92,7 @@ namespace ClientData
 		public async Task RequestItems()
 		{
 			Serializer serializer = Serializer.Create();
-			await connectionService.SendAsync(serializer.Serialize(ServerCommand.GetItemsRequest()));
+			await connectionService.SendAsync(serializer.Serialize(new GetItemsCommand()));
 		}
 
 		public async void RequestUpdate()
@@ -88,9 +101,14 @@ namespace ClientData
 				await RequestItems();
 		}
 
-		public void SellItem(Guid itemId)
+		public async Task SellItem(Guid itemId)
 		{
-			throw new NotImplementedException();
+			if (connectionService.IsConnected())
+			{
+				Serializer serializer = Serializer.Create();
+				SellItemCommand sellItemCommand = new SellItemCommand(itemId);
+				await connectionService.SendAsync(serializer.Serialize(sellItemCommand));
+			}
 		}
 		
 		public List<IItem> GetItems()

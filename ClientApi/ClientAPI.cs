@@ -3,18 +3,41 @@
 namespace ClientApi
 {
 	[Serializable]
-	public struct ServerCommand
+	public abstract class ServerCommand
 	{
-		public string Command;
+		public string Header;
 
-		private ServerCommand(string command)
+		protected ServerCommand(string header)
 		{
-			Command = command;
+			Header = header;
 		}
+	}
 
-		public static ServerCommand GetItemsRequest()
+	[Serializable]
+	public class GetItemsCommand : ServerCommand
+	{
+		public static string StaticHeader = "GetItems";
+		
+		public GetItemsCommand()
+		:base(StaticHeader)
 		{
-			return new ServerCommand("GetItems");
+			
+		}
+	}
+	
+	[Serializable]
+	public class SellItemCommand : ServerCommand
+	{
+		public static string StaticHeader = "SellItem";
+
+		public Guid TransactionID;
+		public Guid ItemID;
+		
+		public SellItemCommand(Guid id)
+		:base(StaticHeader)
+		{
+			TransactionID = Guid.NewGuid();
+			ItemID = id;
 		}
 	}
 
@@ -85,6 +108,21 @@ namespace ClientApi
 		public NewPriceDTO[]? NewPrices;
 
 		public InflationChangedResponse()
+			: base(StaticHeader)
+		{
+		}
+		
+	}
+	
+	[Serializable]
+	public class TransactionResponse : ServerResponse
+	{
+		public static readonly string StaticHeader = "TransactionResponse";
+
+		public Guid TransactionId;
+		public bool Succeeded;
+
+		public TransactionResponse()
 			: base(StaticHeader)
 		{
 		}

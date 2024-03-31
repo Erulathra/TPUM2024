@@ -38,8 +38,8 @@ namespace Data
 			while (true)
 			{
 				Random random = new Random();
-				// from 2 to 4 seconds
-				float waitSeconds = (float)random.NextDouble() * 2f + 2f;
+				// from 5 to 10 seconds
+				float waitSeconds = (float)random.NextDouble() * 5f + 5f;
 				await Task.Delay((int)Math.Truncate(waitSeconds * 1000f));
 				
 				// from 0.5 to 1.5

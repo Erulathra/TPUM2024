@@ -11,6 +11,7 @@ namespace Model
 
         public event EventHandler<ModelInflationChangedEventArgs>? InflationChanged;
         public Action? OnItemsUpdated;
+		public event Action<bool>? TransactionFinish;
 
         public WarehousePresentation(IShop shop)
         {
@@ -18,6 +19,7 @@ namespace Model
 
             shop.ItemsUpdated += () => OnItemsUpdated?.Invoke();
             shop.InflationChanged += (obj, args) => InflationChanged?.Invoke(this, new ModelInflationChangedEventArgs(args));
+            shop.TransactionFinish += succeeded => TransactionFinish?.Invoke(succeeded);
         }
 
         public void RequestUpdate()

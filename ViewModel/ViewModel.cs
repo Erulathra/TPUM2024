@@ -91,6 +91,7 @@ namespace ViewModel
             
             model.WarehousePresentation.InflationChanged += HandleInflationChanged;
             model.WarehousePresentation.OnItemsUpdated += HandleOnItemsUpdated;
+            model.WarehousePresentation.TransactionFinish += HandleTransactionFinish;
 
             OnConnectionStateChanged();
 
@@ -108,6 +109,12 @@ namespace ViewModel
             OnHelmetsButtonCommand = new RelayCommand(() => HandleOnHelmetsButton());
 
             OnItemButtonCommand = new RelayCommand<Guid>((id) => HandleOnItemButton(id));
+        }
+
+        private void HandleTransactionFinish(bool succeeded)
+        {
+            // TODO: Krystian
+            Console.WriteLine($"Transaction finished with status: {succeeded}");
         }
 
         private void Log(string message)
@@ -192,7 +199,6 @@ namespace ViewModel
         private void HandleOnItemButton(Guid id)
         {
             model.SellItem(id);
-            RefreshItems();
         }
 
         private void RefreshItems()

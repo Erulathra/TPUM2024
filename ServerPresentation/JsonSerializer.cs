@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace ServerPresentation
 {
@@ -12,6 +13,17 @@ namespace ServerPresentation
 		public override T Deserialize<T>(string message)
 		{
 			return JsonConvert.DeserializeObject<T>(message);
+		}
+
+		public override string? GetCommandHeader(string message)
+		{
+			JObject jObject = JObject.Parse(message);
+			if (jObject.ContainsKey("Header"))
+			{
+				return (string)jObject["Header"];
+			}
+
+			return null;
 		}
 	}
 }

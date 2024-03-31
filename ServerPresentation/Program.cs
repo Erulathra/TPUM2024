@@ -42,13 +42,37 @@ namespace ServerPresentation
 
 		private async void OnMessage(string message)
 		{
+			if (webSocketConnection == null)
+				return;
+			
 			Console.WriteLine($"New message: {message}");
 
 			Serializer serializer = Serializer.Create();
-			ServerCommand serverCommand = serializer.Deserialize<ServerCommand>(message);
-			if (serverCommand.Command == ServerCommand.GetItemsRequest().Command)
+			if (serializer.GetCommandHeader(message) == GetItemsCommand.StaticHeader)
 			{
+				GetItemsCommand getItemsCommand = serializer.Deserialize<GetItemsCommand>(message);
 				await SendItems();
+			}
+			else if (serializer.GetCommandHeader(message) == SellItemCommand.StaticHeader)
+			{
+				SellItemCommand sellItemCommand = serializer.Deserialize<SellItemCommand>(message);
+				
+				TransactionResponse transactionResponse = new TransactionResponse();
+				transactionResponse.TransactionId = sellItemCommand.TransactionID;
+				try
+				{
+					logicAbstractApi.GetShop().SellItem(sellItemCommand.ItemID);
+					transactionResponse.Succeeded = true;
+				}
+				catch (KeyNotFoundException keyNotFoundException)
+				{
+					Console.WriteLine("Exception caught during selling item");
+					transactionResponse.Succeeded = false;
+				}
+
+				string transactionMessage = serializer.Serialize(transactionResponse);
+				Console.WriteLine($"Send: {transactionMessage}");
+				await webSocketConnection.SendAsync(transactionMessage);
 			}
 		}
 

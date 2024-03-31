@@ -12,6 +12,7 @@ namespace Logic
 		
 		public event EventHandler<LogicInflationChangedEventArgs>? InflationChanged;
 		public event Action? ItemsUpdated;
+		public event Action<bool>? TransactionFinish;
 
 		public Shop(IWarehouse warehouse)
 		{
@@ -19,6 +20,7 @@ namespace Logic
 
 			warehouse.InflationChanged += HandleOnInflationChanged;
 			warehouse.ItemsUpdated += () => ItemsUpdated?.Invoke();
+			warehouse.TransactionFinish += (bool succeeded) => TransactionFinish?.Invoke(succeeded);
 		}
 
 		private void HandleOnInflationChanged(object sender, InflationChangedEventArgs args)
@@ -31,7 +33,7 @@ namespace Logic
 			warehouse.RequestUpdate();
 		}
 
-		public void SellItem(Guid itemId)
+		public async Task SellItem(Guid itemId)
 		{
 			List<IShopItem> items = warehouse.GetAvailableItems()
 											 .Select(item => new ShopItem(item))
@@ -40,7 +42,7 @@ namespace Logic
 			IShopItem? foundItem = items.Find((item) => item.Id == itemId);
 			if (foundItem != null && !foundItem.IsSold)
 			{
-				warehouse.SellItem(foundItem.Id);
+				await warehouse.SellItem(foundItem.Id);
 			}
 			else
 			{

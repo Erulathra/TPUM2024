@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Logic;
 
 namespace Model
@@ -42,9 +43,9 @@ namespace Model
             ModelConnectionService = new ModelConnectionService(this.logicAbstractApi.GetConnectionService());
         }
 
-        public void SellItem(Guid itemId)
+        public async Task SellItem(Guid itemId)
         {
-            logicAbstractApi.GetShop().SellItem(itemId);
+            await logicAbstractApi.GetShop().SellItem(itemId);
         }
     }
 }

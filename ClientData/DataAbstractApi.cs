@@ -31,10 +31,11 @@ namespace ClientData
 
 	    /** Called when items array changed */
 	    public event Action? ItemsUpdated;
-
+		public event Action<bool>? TransactionFinish;
+		
 	    public void RequestUpdate();
 	    
-	    public void SellItem(Guid itemId);
+	    public Task SellItem(Guid itemId);
 	    
 	    public List<IItem> GetItems();
 	    public List<IItem> GetAvailableItems();
