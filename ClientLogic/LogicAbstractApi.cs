@@ -44,6 +44,11 @@ namespace Logic
 	{
 		public event EventHandler<LogicInflationChangedEventArgs> InflationChanged;
 		
+	    /** Called when items array changed */
+	    public event Action? ItemsUpdated;
+
+	    public void RequestUpdate();
+		
 	    public void SellItem(Guid itemId);
 	    
 	    public List<IShopItem> GetItems();
@@ -55,6 +60,9 @@ namespace Logic
     {
 	    public event Action<string>? Logger;
 	    public event Action? OnConnectionStateChanged;
+	    
+	    public event Action<string>? OnMessage;
+	    public event Action? OnError;
 	    
 	    public Task Connect(Uri peerUri);
 	    public Task Disconnect();

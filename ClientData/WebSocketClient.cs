@@ -18,7 +18,6 @@ namespace ClientData
 					logger?.Invoke($"Opening WebSocket connection to remote server {peer}");
 					WebSocketConnection socket = new ClientWebSocketConnection(clientWebSocket, peer, logger);
 					return socket;
-
 				default:
 					logger?.Invoke($"Cannot connect to remote node status {clientWebSocket.State}");
 					throw new WebSocketException($"Cannot connect to remote node status {clientWebSocket.State}");

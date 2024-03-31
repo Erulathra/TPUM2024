@@ -14,7 +14,6 @@ namespace ClientData
 		
 		internal WebSocketConnection? WebSocketConnection { get; private set; }
 		public async Task Connect(Uri peerUri)
-		
 		{
 			try
 			{
@@ -22,10 +21,13 @@ namespace ClientData
 				WebSocketConnection = await WebSocketClient.Connect(peerUri, Logger);
 				OnConnectionStateChanged?.Invoke();
 				WebSocketConnection.OnMessage = (message) => OnMessage?.Invoke(message);
+				WebSocketConnection.OnError = () => OnError?.Invoke();
+				WebSocketConnection.OnClose = () => OnDisconnect?.Invoke();
 			}
 			catch (WebSocketException exception)
 			{
 				Logger?.Invoke($"WebSocked exception: {exception.Message}");
+				OnError?.Invoke();
 			}
 		}
 
@@ -42,5 +44,12 @@ namespace ClientData
 			return WebSocketConnection != null;
 		}
 
+		public async Task SendAsync(string message)
+		{
+			if (WebSocketConnection != null)
+			{
+				await WebSocketConnection.SendAsync(message);
+			}
+		}
 	}
 }

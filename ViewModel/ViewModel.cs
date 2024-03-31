@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -38,8 +37,8 @@ namespace ViewModel
 
         private Model.Model model;
 
-        private ObservableCollection<ItemPresentation> items;
-        public ObservableCollection<ItemPresentation> Items
+        private AsyncObservableCollection<ItemPresentation> items;
+        public AsyncObservableCollection<ItemPresentation> Items
         {
             get => items;
             private set
@@ -84,16 +83,20 @@ namespace ViewModel
         public ViewModel()
         {
             model = new Model.Model(null);
-            model.InflationChanged += HandleInflationChanged;
             model.ModelConnectionService.OnConnectionStateChanged += OnConnectionStateChanged;
+            model.ModelConnectionService.OnError += OnConnectionStateChanged;
+            
             model.ModelConnectionService.Logger += Log;
+            model.ModelConnectionService.OnMessage += OnMessage;
+            
+            model.WarehousePresentation.InflationChanged += HandleInflationChanged;
+            model.WarehousePresentation.OnItemsUpdated += HandleOnItemsUpdated;
 
-            connectionString = "disconnected";
-            model.ModelConnectionService.Connect(new Uri(@"ws://localhost:21370"));
+            OnConnectionStateChanged();
 
             CurrentTab = CurrentTabEnum.All;
-            items = new ObservableCollection<ItemPresentation>();
-            Items = new ObservableCollection<ItemPresentation>(model.WarehousePresentation.GetItems());
+            items = new AsyncObservableCollection<ItemPresentation>();
+            Items = new AsyncObservableCollection<ItemPresentation>(model.WarehousePresentation.GetItems());
             
             inflationString = "n/a";
 
@@ -112,14 +115,34 @@ namespace ViewModel
             Console.WriteLine(message);
         }
 
+        private void OnMessage(string message)
+        {
+            Log($"New Message: {message}");
+        }
+
         private void OnConnectionStateChanged()
         {
-            ConnectionString = model.ModelConnectionService.IsConnected() ? "Connected" : "Disconnected";
+            bool actualState = model.ModelConnectionService.IsConnected();
+            ConnectionString = actualState ? "Connected" : "Disconnected";
+            
+            if (!actualState)
+            {
+                model.ModelConnectionService.Connect(new Uri(@"ws://localhost:21370"));
+            }
+            else
+            {
+                model.WarehousePresentation.RequestUpdate();
+            }
         }
 
         private void HandleInflationChanged(object sender, ModelInflationChangedEventArgs args)
         {
             InflationString = $"NewInflation: {args.NewInflation}";
+            RefreshItems();
+        }
+
+        private void HandleOnItemsUpdated()
+        {
             RefreshItems();
         }
 

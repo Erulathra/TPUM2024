@@ -1,4 +1,5 @@
 ﻿using System;
+using ClientApi;
 
 namespace ClientData
 {
@@ -12,14 +13,14 @@ namespace ClientData
 		public bool IsSold { get; set; }
 
 
-		public Item(string name, string description, ItemType type, float price)
+		public Item(Guid id, string name, string description, ItemType type, float price, bool isSold)
 		{
-			Id = Guid.NewGuid();
+			Id = id;
 			Name = name;
 			Description = description;
 			Type = type;
 			Price = price;
-			IsSold = false;
+			IsSold = isSold;
 		}
 
 		public object Clone()

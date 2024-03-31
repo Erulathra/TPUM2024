@@ -1,43 +1,49 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Logic;
 
 namespace Model
 {
     public class WarehousePresentation
     {
-        private IShop shop { get; set; }
+        private IShop Shop { get; set; }
+
+        public event EventHandler<ModelInflationChangedEventArgs>? InflationChanged;
+        public Action? OnItemsUpdated;
 
         public WarehousePresentation(IShop shop)
         {
-            this.shop = shop;
+            this.Shop = shop;
+
+            shop.ItemsUpdated += () => OnItemsUpdated?.Invoke();
+            shop.InflationChanged += (obj, args) => InflationChanged?.Invoke(this, new ModelInflationChangedEventArgs(args));
+        }
+
+        public void RequestUpdate()
+        {
+            Shop.RequestUpdate();
         }
 
         public List<ItemPresentation> GetItems()
         {
-            return shop.GetItems()
-                            .Select(item => new ItemPresentation(item))
-                            .Cast<ItemPresentation>()
-                            .ToList();
+            return Shop.GetItems()
+                .Select(item => new ItemPresentation(item))
+                .ToList();
         }
 
         public List<ItemPresentation> GetAvailableItems()
         {
-            return shop.GetAvailableItems()
-                            .Select(item => new ItemPresentation(item))
-                            .Cast<ItemPresentation>()
-                            .ToList();
+            return Shop.GetAvailableItems()
+                .Select(item => new ItemPresentation(item))
+                .ToList();
         }
 
         public List<ItemPresentation> GetItemsByType(PresentationItemType itemType)
         {
-            return shop.GetItemsByType((LogicItemType)itemType)
-                            .Select(item => new ItemPresentation(item))
-                            .Cast<ItemPresentation>()
-                            .ToList();
+            return Shop.GetItemsByType((LogicItemType)itemType)
+                .Select(item => new ItemPresentation(item))
+                .ToList();
         }
     }
 }

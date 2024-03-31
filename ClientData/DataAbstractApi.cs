@@ -28,6 +28,11 @@ namespace ClientData
     {
 	    /** Called when inflation changes */
 	    public event EventHandler<InflationChangedEventArgs> InflationChanged;
+
+	    /** Called when items array changed */
+	    public event Action? ItemsUpdated;
+
+	    public void RequestUpdate();
 	    
 	    public void SellItem(Guid itemId);
 	    
@@ -53,6 +58,8 @@ namespace ClientData
 	    public Task Disconnect();
 	    
 	    public bool IsConnected();
+
+	    public Task SendAsync(string message);
     }
 
     public abstract class DataAbstractApi
@@ -75,4 +82,5 @@ namespace ClientData
 		    this.NewInflation = newInflation;
 	    }
     }
+    
 }

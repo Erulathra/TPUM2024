@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using ClientData;
 
 namespace Logic
@@ -10,17 +11,24 @@ namespace Logic
 		private readonly IWarehouse warehouse;
 		
 		public event EventHandler<LogicInflationChangedEventArgs>? InflationChanged;
+		public event Action? ItemsUpdated;
 
 		public Shop(IWarehouse warehouse)
 		{
 			this.warehouse = warehouse;
 
 			warehouse.InflationChanged += HandleOnInflationChanged;
+			warehouse.ItemsUpdated += () => ItemsUpdated?.Invoke();
 		}
 
 		private void HandleOnInflationChanged(object sender, InflationChangedEventArgs args)
 		{
 			InflationChanged?.Invoke(this, new LogicInflationChangedEventArgs(args));
+		}
+
+		public void RequestUpdate()
+		{
+			warehouse.RequestUpdate();
 		}
 
 		public void SellItem(Guid itemId)

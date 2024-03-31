@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ClientApi;
 
 namespace ClientData
 {
@@ -11,30 +12,54 @@ namespace ClientData
 		private readonly object itemsLock = new object();
 
 		public event EventHandler<InflationChangedEventArgs>? InflationChanged;
+		public event Action? ItemsUpdated;
 
-		
+
 		private readonly IConnectionService connectionService;
 
 		public Warehouse(IConnectionService connectionService)
 		{
 			this.connectionService = connectionService;
 			this.connectionService.OnMessage += OnMessage;
+			
 		}
 
-		private void OnMessage(string obj)
+		private void OnMessage(string message)
 		{
-			
+			Serializer serializer = Serializer.Create();
+
+			if (serializer.GetResponseHeader(message) == UpdateAllResponse.UpdateAllItemsHeader)
+			{
+				UpdateAllResponse response = serializer.Deserialize<UpdateAllResponse>(message);
+
+				lock (itemsLock)
+				{
+					items.Clear();
+					foreach (ItemDTO item in response.Items)
+					{
+						items.Add(item.Id, item.ToItem());
+					}
+				}
+
+				ItemsUpdated?.Invoke();
+			}
+		}
+
+		public async Task RequestItems()
+		{
+			Serializer serializer = Serializer.Create();
+			await connectionService.SendAsync(serializer.Serialize(ServerCommand.GetItemsRequest()));
+		}
+
+		public async void RequestUpdate()
+		{
+			if (connectionService.IsConnected())
+				await RequestItems();
 		}
 
 		public void SellItem(Guid itemId)
 		{
-			lock (itemsLock)
-			{
-				if (items.ContainsKey(itemId))
-				{
-					items[itemId].IsSold = true;
-				}
-			}
+			throw new NotImplementedException();
 		}
 		
 		public List<IItem> GetItems()

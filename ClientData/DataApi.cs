@@ -7,8 +7,8 @@
 
 		public DataApi(IConnectionService? connectionService)
 		{
-			connectionService = connectionService ?? new ConnectionService();
-			warehouse = new Warehouse(connectionService);
+			this.connectionService = connectionService ?? new ConnectionService();
+			warehouse = new Warehouse(this.connectionService);
 		}
 
 		public override IWarehouse GetWarehouse()

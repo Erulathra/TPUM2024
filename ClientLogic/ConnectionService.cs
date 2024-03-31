@@ -7,8 +7,11 @@ namespace Logic
 	{
 		public event Action<string>? Logger;
 		public event Action? OnConnectionStateChanged;
+		
+	    public event Action<string>? OnMessage;
+	    public event Action? OnError;
 
-		private ClientData.IConnectionService dataConnectionService;
+		private readonly ClientData.IConnectionService dataConnectionService;
 
 		public LogicConnectionService(ClientData.IConnectionService connectionService)
 		{
@@ -16,6 +19,9 @@ namespace Logic
 			
 		    connectionService.Logger += (message) => Logger?.Invoke(message);
 		    connectionService.OnConnectionStateChanged += () => OnConnectionStateChanged?.Invoke();
+		    
+		    connectionService.OnMessage += (message) => OnMessage?.Invoke(message);
+		    connectionService.OnError += () => OnError?.Invoke();
 		}
 
 		public async Task Connect(Uri peerUri)

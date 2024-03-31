@@ -8,6 +8,9 @@ namespace Model
 	{
 		public event Action<string>? Logger;
 		public event Action? OnConnectionStateChanged;
+		
+	    public event Action<string>? OnMessage;
+	    public event Action? OnError;
 
 	    private readonly ILogicConnectionService connectionService;
 
@@ -16,6 +19,8 @@ namespace Model
 		    this.connectionService = connectionService;
 		    this.connectionService.Logger += (message) => Logger?.Invoke(message);
 		    this.connectionService.OnConnectionStateChanged += () => OnConnectionStateChanged?.Invoke();
+		    this.connectionService.OnMessage += (message) => OnMessage?.Invoke(message);
+		    this.connectionService.OnError += () => OnError?.Invoke();
 	    }
 
 

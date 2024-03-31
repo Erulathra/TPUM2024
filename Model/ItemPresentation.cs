@@ -5,6 +5,7 @@ using Logic;
 
 namespace Model
 {
+    // TODO: LiptonLeon -- In theory you should not use Model types in View so you need to define adapters in ViewModel 
     public class ItemPresentation : INotifyPropertyChanged
     {
         public Guid Id { get; private set; }
