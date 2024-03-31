@@ -43,6 +43,11 @@ namespace ClientData
     {
 	    public event Action<string>? Logger;
 	    public event Action? OnConnectionStateChanged;
+
+	    public event Action<string>? OnMessage;
+	    public event Action? OnError;
+	    public event Action? OnDisconnect;
+	    
 	    
 	    public Task Connect(Uri peerUri);
 	    public Task Disconnect();
@@ -52,9 +57,9 @@ namespace ClientData
 
     public abstract class DataAbstractApi
     {
-	    public static DataAbstractApi Create()
+	    public static DataAbstractApi Create(IConnectionService? connectionService)
 	    {
-		    return new DataApi();
+		    return new DataApi(connectionService);
 	    }
 
 	    public abstract IWarehouse GetWarehouse();

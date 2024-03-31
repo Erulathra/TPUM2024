@@ -73,7 +73,7 @@ namespace Logic
 
 		public static LogicAbstractApi Create(DataAbstractApi? dataAbstractApi = null)
 		{
-			DataAbstractApi dataApi = dataAbstractApi ?? DataAbstractApi.Create();
+			DataAbstractApi dataApi = dataAbstractApi ?? DataAbstractApi.Create(null);
 			return new ClientLogic.Logic(dataApi);
 		}
 

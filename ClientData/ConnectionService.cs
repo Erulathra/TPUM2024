@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Net.WebSockets;
 using System.Threading.Tasks;
 
@@ -9,8 +8,9 @@ namespace ClientData
 	{
 		public event Action<string>? Logger;
 		public event Action? OnConnectionStateChanged;
-
 		public event Action<string>? OnMessage;
+		public event Action? OnError;
+		public event Action? OnDisconnect;
 		
 		internal WebSocketConnection? WebSocketConnection { get; private set; }
 		public async Task Connect(Uri peerUri)

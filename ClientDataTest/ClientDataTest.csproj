@@ -2,11 +2,11 @@
 
     <PropertyGroup>
         <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
 
         <IsPackable>false</IsPackable>
         <IsTestProject>true</IsTestProject>
-        <RootNamespace>DataTest</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
@@ -19,9 +19,9 @@
     <ItemGroup>
         <Using Include="Microsoft.VisualStudio.TestTools.UnitTesting"/>
     </ItemGroup>
-
+    
     <ItemGroup>
-        <ProjectReference Include="..\ServerLogic\ServerLogic.csproj" />
+        <ProjectReference Include="..\ClientData\ClientData.csproj" />
     </ItemGroup>
 
 </Project>

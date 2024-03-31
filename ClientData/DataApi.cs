@@ -3,11 +3,11 @@
 	internal class DataApi : DataAbstractApi
 	{
 		private readonly Warehouse warehouse;
-		private readonly ConnectionService connectionService;
+		private readonly IConnectionService connectionService;
 
-		public DataApi()
+		public DataApi(IConnectionService? connectionService)
 		{
-			connectionService = new ConnectionService();
+			connectionService = connectionService ?? new ConnectionService();
 			warehouse = new Warehouse(connectionService);
 		}
 

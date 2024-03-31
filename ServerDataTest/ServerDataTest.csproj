@@ -2,13 +2,11 @@
 
     <PropertyGroup>
         <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
 
         <IsPackable>false</IsPackable>
         <IsTestProject>true</IsTestProject>
-        <OutputType>Library</OutputType>
-        <LangVersion>10</LangVersion>
-        <RootNamespace>DataTest</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>

@@ -13,9 +13,9 @@ namespace ClientData
 		public event EventHandler<InflationChangedEventArgs>? InflationChanged;
 
 		
-		private readonly ConnectionService connectionService;
+		private readonly IConnectionService connectionService;
 
-		public Warehouse(ConnectionService connectionService)
+		public Warehouse(IConnectionService connectionService)
 		{
 			this.connectionService = connectionService;
 			this.connectionService.OnMessage += OnMessage;
