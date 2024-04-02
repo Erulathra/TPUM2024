@@ -12,9 +12,10 @@
         <vm:ViewModel/>
     </Window.DataContext>
     <Grid>
-        <Grid>
-            <TextBlock Padding="10px" Text="{Binding InflationString}" Margin="327,4,0,0"/>
-            <TextBlock Padding="10px" Text="{Binding ConnectionString}" Margin="700,4,0,0"/>
+        <Grid Margin="0,393,0,0" Background="#FFF4F4F4" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5" Height="41">
+            <TextBlock Text="{Binding InflationString}" Margin="109,0,516,0"/>
+            <TextBlock Text="{Binding ConnectionString}" Margin="5,0,691,0"/>
+            <TextBlock Text="{Binding TransactionString}" Margin="304,0,0,0"/>
         </Grid>
         <Label Content="Sort By:" Margin="0,10,10,30"/>
         <Button x:Name="AllButton" Command="{Binding OnAllButtonCommand}" Content="All" HorizontalAlignment="Left" Margin="52,13,0,0" VerticalAlignment="Top" Height="19"/>
@@ -23,7 +24,7 @@
         <Button x:Name="SwordsButton" Command="{Binding OnSwordsButtonCommand}" HorizontalAlignment="Left" Margin="180,13,0,0" VerticalAlignment="Top" Height="19" Width="47" Content="Swords"/>
         <Button x:Name="ArmorsButton" Command="{Binding OnArmorsButtonCommand}" Content="Armors" HorizontalAlignment="Left" Margin="232,13,0,0" VerticalAlignment="Top" Height="19"/>
         <Button x:Name="HelmetsButton" Command="{Binding OnHelmetsButtonCommand}" Content="Helmets" HorizontalAlignment="Left" Margin="280,13,0,0" VerticalAlignment="Top" Height="19"/>
-        <StackPanel Margin="10,46,5,20" Orientation="Vertical">
+        <StackPanel Margin="10,46,5,56" Orientation="Vertical">
             <ItemsControl ItemsSource="{Binding Items}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>

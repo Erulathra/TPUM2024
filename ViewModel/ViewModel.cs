@@ -81,6 +81,20 @@ namespace ViewModel
             }
         }
 
+        private string transactionString;
+        public string TransactionString
+        {
+            get => transactionString;
+            private set
+            {
+                if (transactionString != value)
+                {
+                    transactionString = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
         public ViewModel()
         {
             model = new Model.Model(null);
@@ -99,7 +113,8 @@ namespace ViewModel
             CurrentTab = CurrentTabEnum.All;
             Items = new AsyncObservableCollection<ViewModelItem>(model.WarehousePresentation.GetItems().Select(item => new ViewModelItem(item)));
             
-            inflationString = "n/a";
+            inflationString = "Inflation: n/a";
+            transactionString = "Transaction: Ready";
 
             OnAllButtonCommand = new RelayCommand(() => HandleOnAllButton());
             OnAvailableButtonCommand = new RelayCommand(() => HandleOnAvailableButton());
@@ -121,8 +136,10 @@ namespace ViewModel
 
         private void HandleTransactionFinish(bool succeeded)
         {
-            // TODO: Krystian
-            Console.WriteLine($"Transaction finished with status: {succeeded}");
+            string time = DateTime.Now.ToLongTimeString();
+            TransactionString = succeeded ?
+                $"Transaction finished succesfully! ({time})"
+                : $"Transaction failed! ({time})";
         }
 
         private void Log(string message)
@@ -152,7 +169,7 @@ namespace ViewModel
 
         private void HandleInflationChanged(object sender, ModelInflationChangedEventArgs args)
         {
-            InflationString = $"NewInflation: {args.NewInflation}";
+            InflationString = $"Inflation: {args.NewInflation}";
             RefreshItems();
         }
 
