@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ClientApi;
+﻿using ClientApi;
 using ClientData;
 
 namespace ClientDataTest
@@ -16,7 +10,7 @@ namespace ClientDataTest
         public event Action<string>? OnMessage;
         public event Action? OnError;
         public event Action? OnDisconnect;
-
+        
         public Task Connect(Uri peerUri)
         {
             throw new NotImplementedException();
@@ -82,12 +76,5 @@ namespace ClientDataTest
             response.Items = items;
             OnMessage?.Invoke(serializer.Serialize(response));
         }
-
-        /*        public void MockUpdateAllResponse()
-                {
-                    UpdateAllResponse = new UpdateAllResponse();
-                    JsonConvert.SerializeObject<>
-                    OnMessage?.Invoke();
-                }*/
     }
 }

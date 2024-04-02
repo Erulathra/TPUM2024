@@ -57,7 +57,7 @@ public class ClientDataTest
 	}
 
 	[TestMethod]
-	public void SellItemTest()
+	public async void SellItemTest()
 	{
 		Guid sellGuid = Guid.NewGuid();
         connectionService.MockUpdateAll([
@@ -65,7 +65,7 @@ public class ClientDataTest
 			new ItemDTO(Guid.NewGuid(), "n2", "d", "Armor", 30.0f, false)
 		]);
 
-		data.GetWarehouse().SellItem(sellGuid);
+		await data.GetWarehouse().SellItem(sellGuid);
 
 		Assert.AreEqual(sellGuid, connectionService.lastSoldGuid);
     }

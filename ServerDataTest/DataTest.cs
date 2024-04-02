@@ -56,7 +56,7 @@ namespace DataTest
             List<IItem> items = data.GetWarehouse().GetItems();
             
             data.GetWarehouse().SellItem(items[0].Id);
-            Assert.AreEqual(data.GetWarehouse().GetAvailableItems().Count, items.Count - 1);
+            Assert.AreEqual(data.GetWarehouse().GetItems().Count(item => !item.IsSold), items.Count - 1);
         }
         
         [TestMethod]
@@ -70,18 +70,6 @@ namespace DataTest
             
             data.GetWarehouse().RemoveItem(item.Id);
             Assert.ThrowsException<KeyNotFoundException>(() => data.GetWarehouse().GetItemByID(item.Id));
-        }
-
-        [TestMethod]
-        public void GetItemsByTypeTest()
-        {
-            DataAbstractApi data = PrepareData();
-            List<IItem> foundItems = data.GetWarehouse().GetItemsByType(ItemType.Potion);
-
-            foreach (IItem item in foundItems)
-            {
-                Assert.AreEqual(item.Type, ItemType.Potion);
-            }
         }
 
         [TestMethod]

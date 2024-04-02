@@ -25,7 +25,8 @@ namespace Logic
 
 		public void SellItem(Guid itemId)
 		{
-			List<IShopItem> items = warehouse.GetAvailableItems()
+			List<IShopItem> items = warehouse.GetItems()
+											 .Where(item => !item.IsSold)
 											 .Select(item => new ShopItem(item))
 											 .Cast<IShopItem>()
 											 .ToList();
@@ -43,22 +44,6 @@ namespace Logic
 		public List<IShopItem> GetItems()
 		{
 			return warehouse.GetItems()
-							.Select(item => new ShopItem(item))
-							.Cast<IShopItem>()
-							.ToList();
-		}
-
-		public List<IShopItem> GetAvailableItems()
-		{
-			return warehouse.GetAvailableItems()
-							.Select(item => new ShopItem(item))
-							.Cast<IShopItem>()
-							.ToList();
-		}
-
-		public List<IShopItem> GetItemsByType(LogicItemType logicItemType)
-		{
-			return warehouse.GetItemsByType((ItemType)logicItemType)
 							.Select(item => new ShopItem(item))
 							.Cast<IShopItem>()
 							.ToList();

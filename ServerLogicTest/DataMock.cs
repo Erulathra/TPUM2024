@@ -40,40 +40,30 @@ namespace LogicTest
 
 	public class WarehouseMock : IWarehouse
 	{
-		private readonly List<IItem> allItems;
-		private readonly List<IItem> availableItems;
+		private readonly List<IItem> items;
 
 		public WarehouseMock()
 		{
-			availableItems = new List<IItem>
+			items = new List<IItem>
 			{
 				new ItemMock("Test", "TestDesc", ItemType.Armor, 10f, false),
-				new ItemMock("Test2", "TestDesc2", ItemType.Armor, 11f, false)
-			};
-			allItems = new List<IItem>
-			{
+				new ItemMock("Test2", "TestDesc2", ItemType.Armor, 11f, false),
 				new ItemMock("Sold", "SoldDesc2", ItemType.Helmet, 11f, true)
 			};
-			allItems.AddRange(availableItems);
 		}
 
 		public void SellItem(Guid itemId)
 		{
-			IItem? item = availableItems.Find((item) => item.Id == itemId);
+			IItem? item = items.Find((item) => item.Id == itemId);
 			if (item != null)
 			{
-				availableItems.Remove(item);
+				item.IsSold = true;
 			}
 		}
 
 		public List<IItem> GetItems()
 		{
-			return allItems;
-		}
-
-		public List<IItem> GetAvailableItems()
-		{
-			return availableItems;
+			return items;
 		}
 
 		public float GetCurrentInflation()
@@ -101,16 +91,6 @@ namespace LogicTest
 		public IItem GetItemByID(Guid guid)
 		{
 			throw new NotImplementedException();
-		}
-
-		public List<IItem> GetItemsByType(ItemType type)
-		{
-			if (type == ItemType.Armor)
-			{
-				return availableItems;
-			}
-
-			return new List<IItem>();
 		}
 	}
 }

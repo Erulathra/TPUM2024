@@ -93,19 +93,6 @@ namespace Data
 			return result;
 		}
 
-		public List<IItem> GetAvailableItems()
-		{
-			List<IItem> result = new List<IItem>();
-			lock (itemsLock)
-			{
-				result.AddRange(items.Values
-					.Where(item => !item.IsSold)
-					.Select(item => (IItem)item.Clone()));
-			}
-			
-			return result;
-		}
-
 		public void AddItem(IItem itemToAdd)
 		{
 			lock (itemsLock)
@@ -135,19 +122,6 @@ namespace Data
 				{
 					throw new KeyNotFoundException();
 				}
-			}
-			
-			return result;
-		}
-
-		public List<IItem> GetItemsByType(ItemType type)
-		{
-			List<IItem> result = new List<IItem>();
-			lock (itemsLock)
-			{
-				result.AddRange(items.Values
-					.Where(item => item.Type == type)
-					.Select(item => (IItem)item.Clone()));
 			}
 			
 			return result;

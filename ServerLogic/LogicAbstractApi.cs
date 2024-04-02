@@ -46,8 +46,6 @@ namespace Logic
 	    public void SellItem(Guid itemId);
 	    
 	    public List<IShopItem> GetItems();
-	    public List<IShopItem> GetAvailableItems();
-	    public List<IShopItem> GetItemsByType(LogicItemType logicItemType);
 	}
 
 	public abstract class LogicAbstractApi

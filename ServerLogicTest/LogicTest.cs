@@ -1,4 +1,4 @@
-using Data;
+using System.Linq;
 using Logic;
 
 namespace LogicTest
@@ -11,18 +11,20 @@ namespace LogicTest
         [TestMethod]
         public void SellItem()
         {
-            IShopItem itemToSell = logicApi.GetShop().GetAvailableItems()[0];
+            IShopItem[] availableItems = logicApi.GetShop().GetItems().Where(item => !item.IsSold).ToArray();
+            Assert.IsTrue(availableItems.Length == 2);
+            IShopItem itemToSell = availableItems.First();
             logicApi.GetShop().SellItem(itemToSell.Id);
             
-            Assert.IsTrue(logicApi.GetShop().GetAvailableItems().Count == 1);
+            availableItems = logicApi.GetShop().GetItems().Where(item => !item.IsSold).ToArray();
+            
+            Assert.IsTrue(availableItems.Length == 1);
         }
         
         [TestMethod]
         public void GetItems()
         {
-            Assert.IsTrue(logicApi.GetShop().GetAvailableItems().Count == 2);
             Assert.IsTrue(logicApi.GetShop().GetItems().Count == 3);
-            Assert.IsTrue(logicApi.GetShop().GetItemsByType(LogicItemType.Armor).Count == 2);
         }
     }
 }

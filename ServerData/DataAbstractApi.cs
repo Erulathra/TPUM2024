@@ -33,13 +33,11 @@ namespace Data
 	    public void SellItem(Guid itemId);
 	    
 	    public List<IItem> GetItems();
-	    public List<IItem> GetAvailableItems();
+	    public IItem GetItemByID(Guid guid);
 	    
 	    public void AddItem(IItem itemToAdd);
 	    public void RemoveItem(Guid itemIdToRemove);
 
-	    public IItem GetItemByID(Guid guid);
-	    public List<IItem> GetItemsByType(ItemType type);
 
     }
 
