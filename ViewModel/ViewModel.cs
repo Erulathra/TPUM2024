@@ -1,8 +1,9 @@
 ﻿using System;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Model;
 
@@ -37,8 +38,8 @@ namespace ViewModel
 
         private Model.Model model;
 
-        private AsyncObservableCollection<ItemPresentation> items;
-        public AsyncObservableCollection<ItemPresentation> Items
+        private AsyncObservableCollection<ViewModelItem> items;
+        public AsyncObservableCollection<ViewModelItem> Items
         {
             get => items;
             private set
@@ -96,8 +97,7 @@ namespace ViewModel
             OnConnectionStateChanged();
 
             CurrentTab = CurrentTabEnum.All;
-            items = new AsyncObservableCollection<ItemPresentation>();
-            Items = new AsyncObservableCollection<ItemPresentation>(model.WarehousePresentation.GetItems());
+            Items = new AsyncObservableCollection<ViewModelItem>(model.WarehousePresentation.GetItems().Select(item => new ViewModelItem(item)));
             
             inflationString = "n/a";
 
@@ -109,6 +109,14 @@ namespace ViewModel
             OnHelmetsButtonCommand = new RelayCommand(() => HandleOnHelmetsButton());
 
             OnItemButtonCommand = new RelayCommand<Guid>((id) => HandleOnItemButton(id));
+        }
+
+        public async Task CloseConnection()
+        {
+            if (model.ModelConnectionService.IsConnected())
+            {
+                await model.ModelConnectionService.Disconnect();
+            }
         }
 
         private void HandleTransactionFinish(bool succeeded)
@@ -207,15 +215,15 @@ namespace ViewModel
 
             if (CurrentTab == CurrentTabEnum.All)
             {
-                model.WarehousePresentation.GetItems().ToList().ForEach(items.Add);
+                items.AddRange(model.WarehousePresentation.GetItems().Select(item => new ViewModelItem(item)));
             }
             else if (CurrentTab == CurrentTabEnum.Available)
             {
-                model.WarehousePresentation.GetAvailableItems().ToList().ForEach(items.Add);
+                items.AddRange(model.WarehousePresentation.GetAvailableItems().Select(item => new ViewModelItem(item)));
             }
             else
             {
-                model.WarehousePresentation.GetItemsByType((PresentationItemType)CurrentTab).ToList().ForEach(items.Add);
+                items.AddRange(model.WarehousePresentation.GetItemsByType((ModelItemType)CurrentTab).Select(item => new ViewModelItem(item)));
             }
         }
 

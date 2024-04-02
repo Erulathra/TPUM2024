@@ -4,7 +4,7 @@ using Logic;
 
 namespace Model
 {
-	public enum PresentationItemType
+	public enum ModelItemType
 	{
         Potion = 0,
         Sword = 1,

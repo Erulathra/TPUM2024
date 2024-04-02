@@ -30,6 +30,8 @@ namespace ClientData
 				OnError?.Invoke();
 			}
 		}
+		
+		
 
 		public async Task Disconnect()
 		{

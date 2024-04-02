@@ -64,9 +64,9 @@ namespace ServerPresentation
 					logicAbstractApi.GetShop().SellItem(sellItemCommand.ItemID);
 					transactionResponse.Succeeded = true;
 				}
-				catch (KeyNotFoundException keyNotFoundException)
+				catch (Exception exception)
 				{
-					Console.WriteLine("Exception caught during selling item");
+					Console.WriteLine($"Exception \"{exception.Message}\" caught during selling item");
 					transactionResponse.Succeeded = false;
 				}
 
@@ -118,9 +118,10 @@ namespace ServerPresentation
 			Console.WriteLine($"Connection error");
 		}
 
-		private void OnClose()
+		private async void OnClose()
 		{
 			Console.WriteLine($"Connection closed");
+			webSocketConnection = null;
 		}
 		
 

@@ -20,6 +20,7 @@ namespace ViewModel
 		{
 			synchronizationContext = SynchronizationContext.Current;
 		}
+		
 
 		protected override void OnCollectionChanged(NotifyCollectionChangedEventArgs eventArgs)
 		{
@@ -59,6 +60,14 @@ namespace ViewModel
 		{
 			// We are in the creator thread, call the base implementation directly
 			base.OnPropertyChanged((PropertyChangedEventArgs)param);
+		}
+
+		public void AddRange(IEnumerable<T> elements)
+		{
+			foreach (var element in elements)
+			{
+				Add(element);
+			}
 		}
 	}
 }

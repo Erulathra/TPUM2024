@@ -27,24 +27,24 @@ namespace Model
             Shop.RequestUpdate();
         }
 
-        public List<ItemPresentation> GetItems()
+        public List<ModelItem> GetItems()
         {
             return Shop.GetItems()
-                .Select(item => new ItemPresentation(item))
+                .Select(item => new ModelItem(item))
                 .ToList();
         }
 
-        public List<ItemPresentation> GetAvailableItems()
+        public List<ModelItem> GetAvailableItems()
         {
             return Shop.GetAvailableItems()
-                .Select(item => new ItemPresentation(item))
+                .Select(item => new ModelItem(item))
                 .ToList();
         }
 
-        public List<ItemPresentation> GetItemsByType(PresentationItemType itemType)
+        public List<ModelItem> GetItemsByType(ModelItemType itemType)
         {
             return Shop.GetItemsByType((LogicItemType)itemType)
-                .Select(item => new ItemPresentation(item))
+                .Select(item => new ModelItem(item))
                 .ToList();
         }
     }

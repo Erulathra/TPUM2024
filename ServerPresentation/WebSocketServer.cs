@@ -33,6 +33,7 @@ namespace ServerPresentation
 				WebSocketConnection connection = new ServerWebSocketConnection(context.WebSocket, httpContext.Request.RemoteEndPoint);
 				onConnection?.Invoke(connection);
 			}
+			
 		}
 
 		private class ServerWebSocketConnection : WebSocketConnection

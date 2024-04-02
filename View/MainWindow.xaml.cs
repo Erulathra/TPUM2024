@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,6 +24,13 @@ namespace View
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+
+        private async void MainWindow_OnClosing(object sender, CancelEventArgs e)
+        {
+            ViewModel.ViewModel viewModel = (ViewModel.ViewModel)DataContext;
+            await viewModel.CloseConnection();
         }
     }
 }
