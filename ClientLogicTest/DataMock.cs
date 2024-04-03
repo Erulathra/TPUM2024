@@ -129,11 +129,24 @@ namespace LogicTest
             await new Task(() => { });
         }
 
+		private IObserver<InflationChangedEventArgs> observer;
+
         public IDisposable Subscribe(IObserver<InflationChangedEventArgs> observer)
         {
-	        throw new NotImplementedException();
+            this.observer = observer;
+			return new DisposableMock();
+		}
+
+        private class DisposableMock : IDisposable
+        {
+			public DisposableMock() { }
+			
+			public void Dispose()
+            {
+				throw new NotImplementedException();
+            }
         }
-	}
+    }
 
     public class ConnectionServiceMock : IConnectionService
     {
