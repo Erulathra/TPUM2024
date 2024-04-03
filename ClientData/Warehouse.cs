@@ -11,7 +11,8 @@ namespace ClientData
 		private readonly Dictionary<Guid, IItem> items = new Dictionary<Guid, IItem>();
 		private readonly object itemsLock = new object();
 
-		public event EventHandler<InflationChangedEventArgs>? InflationChanged;
+		private HashSet<IObserver<InflationChangedEventArgs>> observers;
+
 		public event Action? ItemsUpdated;
 		public event Action<bool>? TransactionFinish;
 
@@ -20,8 +21,19 @@ namespace ClientData
 
 		public Warehouse(IConnectionService connectionService)
 		{
+			observers = new HashSet<IObserver<InflationChangedEventArgs>>();
+			
 			this.connectionService = connectionService;
 			this.connectionService.OnMessage += OnMessage;
+		}
+
+		~Warehouse()
+		{
+			List<IObserver<InflationChangedEventArgs>> cachedObservers = observers.ToList();
+			foreach (IObserver<InflationChangedEventArgs>? observer in cachedObservers)
+			{
+				observer?.OnCompleted();
+			}
 		}
 
 		private void OnMessage(string message)
@@ -85,8 +97,11 @@ namespace ClientData
 					}
 				}
 			}
-			
-			InflationChanged?.Invoke(this, new InflationChangedEventArgs(response.NewInflation));
+
+			foreach (IObserver<InflationChangedEventArgs>? observer in observers)
+			{
+				observer.OnNext(new InflationChangedEventArgs(response.NewInflation));
+			}
 		}
 
 		public async Task RequestItems()
@@ -181,5 +196,34 @@ namespace ClientData
 			
 			return result;
 		}
+
+		public IDisposable Subscribe(IObserver<InflationChangedEventArgs> observer)
+		{
+			observers.Add(observer);
+			return new WarehouseDisposable(this, observer);
+		}
+
+		private void UnSubscribe(IObserver<InflationChangedEventArgs> observer)
+		{
+			observers.Remove(observer);
+		}
+		
+		private class WarehouseDisposable : IDisposable
+		{
+			private readonly Warehouse warehouse;
+			private readonly IObserver<InflationChangedEventArgs> observer;
+
+			public WarehouseDisposable(Warehouse warehouse, IObserver<InflationChangedEventArgs> observer)
+			{
+				this.warehouse = warehouse;
+				this.observer = observer;
+			}
+
+			public void Dispose()
+			{
+				warehouse.UnSubscribe(observer);
+			}
+		}
 	}
+
 }

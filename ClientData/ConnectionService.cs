@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net.WebSockets;
 using System.Threading.Tasks;
+using ServerPresentation;
 
 namespace ClientData
 {

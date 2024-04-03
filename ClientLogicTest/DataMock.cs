@@ -128,7 +128,12 @@ namespace LogicTest
 			// Return dummy task
             await new Task(() => { });
         }
-    }
+
+        public IDisposable Subscribe(IObserver<InflationChangedEventArgs> observer)
+        {
+	        throw new NotImplementedException();
+        }
+	}
 
     public class ConnectionServiceMock : IConnectionService
     {

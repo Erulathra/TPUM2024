@@ -6,7 +6,7 @@ using ClientData;
 
 namespace Logic
 {
-	internal class Shop : IShop
+	internal class Shop : IShop, IObserver<InflationChangedEventArgs>
 	{
 		private readonly IWarehouse warehouse;
 		
@@ -14,18 +14,16 @@ namespace Logic
 		public event Action? ItemsUpdated;
 		public event Action<bool>? TransactionFinish;
 
+		private IDisposable WarehouseSubscriptionHandle;
+
 		public Shop(IWarehouse warehouse)
 		{
 			this.warehouse = warehouse;
 
-			warehouse.InflationChanged += HandleOnInflationChanged;
+			WarehouseSubscriptionHandle = warehouse.Subscribe(this);
+
 			warehouse.ItemsUpdated += () => ItemsUpdated?.Invoke();
 			warehouse.TransactionFinish += (bool succeeded) => TransactionFinish?.Invoke(succeeded);
-		}
-
-		private void HandleOnInflationChanged(object sender, InflationChangedEventArgs args)
-		{
-			InflationChanged?.Invoke(this, new LogicInflationChangedEventArgs(args));
 		}
 
 		public void RequestUpdate()
@@ -72,6 +70,21 @@ namespace Logic
 							.Select(item => new ShopItem(item))
 							.Cast<IShopItem>()
 							.ToList();
+		}
+
+		public void OnCompleted()
+		{
+			WarehouseSubscriptionHandle.Dispose();
+		}
+
+		public void OnError(Exception error)
+		{
+			
+		}
+
+		public void OnNext(InflationChangedEventArgs value)
+		{
+			InflationChanged?.Invoke(this, new LogicInflationChangedEventArgs(value));
 		}
 	}
 }

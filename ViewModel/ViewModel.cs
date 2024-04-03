@@ -113,7 +113,7 @@ namespace ViewModel
             CurrentTab = CurrentTabEnum.All;
             Items = new AsyncObservableCollection<ViewModelItem>(model.WarehousePresentation.GetItems().Select(item => new ViewModelItem(item)));
             
-            inflationString = "Inflation: n/a";
+            inflationString = "Inflation: 1.0";
             transactionString = "Transaction: Ready";
 
             OnAllButtonCommand = new RelayCommand(() => HandleOnAllButton());

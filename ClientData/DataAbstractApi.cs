@@ -24,11 +24,8 @@ namespace ClientData
         bool IsSold { get; set;  }
     }
     
-    public interface IWarehouse
+    public interface IWarehouse : IObservable<InflationChangedEventArgs>
     {
-	    /** Called when inflation changes */
-	    public event EventHandler<InflationChangedEventArgs> InflationChanged;
-
 	    /** Called when items array changed */
 	    public event Action? ItemsUpdated;
 		public event Action<bool>? TransactionFinish;
