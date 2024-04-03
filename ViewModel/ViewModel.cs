@@ -159,7 +159,7 @@ namespace ViewModel
             
             if (!actualState)
             {
-                model.ModelConnectionService.Connect(new Uri(@"ws://localhost:21370"));
+                Task.Run(() => model.ModelConnectionService.Connect(new Uri(@"ws://localhost:21370")));
             }
             else
             {
@@ -223,7 +223,7 @@ namespace ViewModel
         public ICommand OnItemButtonCommand { get; private set; }
         private void HandleOnItemButton(Guid id)
         {
-            model.SellItem(id);
+            Task.Run(async () => await model.SellItem(id));
         }
 
         private void RefreshItems()

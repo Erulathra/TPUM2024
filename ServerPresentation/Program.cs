@@ -51,7 +51,7 @@ namespace ServerPresentation
 			if (serializer.GetCommandHeader(message) == GetItemsCommand.StaticHeader)
 			{
 				GetItemsCommand getItemsCommand = serializer.Deserialize<GetItemsCommand>(message);
-				await SendItems();
+				Task task = Task.Run( async () => await SendItems());
 			}
 			else if (serializer.GetCommandHeader(message) == SellItemCommand.StaticHeader)
 			{

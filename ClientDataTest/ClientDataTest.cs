@@ -57,7 +57,7 @@ public class ClientDataTest
 	}
 
 	[TestMethod]
-	public async void SellItemTest()
+	public async Task SellItemTest()
 	{
 		Guid sellGuid = Guid.NewGuid();
         connectionService.MockUpdateAll([

@@ -23,7 +23,7 @@ namespace ClientDataTest
 
         public bool IsConnected()
         {
-            throw new NotImplementedException();
+            return true;
         }
 
         public async Task SendAsync(string message)
@@ -44,7 +44,7 @@ namespace ClientDataTest
                 OnMessage?.Invoke(serializer.Serialize(response));
             }
 
-            await new Task(() => { });
+            await Task.Delay(0);
         }
 
         // Fields and methods for test purposes

@@ -55,7 +55,7 @@ namespace ClientData
 				TransactionResponse response = serializer.Deserialize<TransactionResponse>(message);
 				if (response.Succeeded)
 				{
-					RequestItems();
+					Task.Run(() => RequestItems());
 					TransactionFinish?.Invoke(true);
 				}
 				else
@@ -110,13 +110,15 @@ namespace ClientData
 			await connectionService.SendAsync(serializer.Serialize(new GetItemsCommand()));
 		}
 
-		public async void RequestUpdate()
-		{
-			if (connectionService.IsConnected())
-				await RequestItems();
-		}
+        public void RequestUpdate()
+        {
+            if (connectionService.IsConnected())
+            {
+                Task task = Task.Run(async () => await RequestItems());
+            }
+        }
 
-		public async Task SellItem(Guid itemId)
+        public async Task SellItem(Guid itemId)
 		{
 			if (connectionService.IsConnected())
 			{
