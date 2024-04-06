@@ -1,5 +1,5 @@
 ﻿using System;
-using ClientApi;
+using ConnectionApi;
 
 namespace ClientData
 {

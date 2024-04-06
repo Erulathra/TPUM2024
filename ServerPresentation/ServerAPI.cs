@@ -1,11 +1,12 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
-namespace ClientApi
+namespace ConnectionApi
 {
 	[Serializable]
 	public abstract class ServerCommand
 	{
-		public string Header;
+		public string Header { get; set; }
 
 		protected ServerCommand(string header)
 		{
@@ -30,8 +31,8 @@ namespace ClientApi
 	{
 		public static string StaticHeader = "SellItem";
 
-		public Guid TransactionID;
-		public Guid ItemID;
+		public Guid TransactionID { get; set; }
+		public Guid ItemID { get; set; }
 		
 		public SellItemCommand(Guid id)
 		:base(StaticHeader)
@@ -42,14 +43,24 @@ namespace ClientApi
 	}
 
 	[Serializable]
-	public struct ItemDTO
+	public class ItemDTO
 	{
-		public Guid Id;
-		public string Name;
-		public string Description;
-		public string Type;
-		public float Price;
-		public bool IsSold;
+		public Guid Id { get; set; }
+		public string Name { get; set; }
+		public string Description { get; set; }
+		public string Type { get; set; }
+		public float Price { get; set; }
+		public bool IsSold { get; set; }
+
+		public ItemDTO()
+		{
+			Id = Guid.Empty;
+			Name = "None";
+			Description = "None";
+			Type = "None";
+			Price = 0f;
+			IsSold = false;
+		}
 
 		public ItemDTO(Guid id, string name, string description, string type, float price, bool isSold)
 		{
@@ -65,8 +76,8 @@ namespace ClientApi
 	[Serializable]
 	public struct NewPriceDTO
 	{
-		public Guid ItemID;
-		public float NewPrice;
+		public Guid ItemID { get; set; }
+		public float NewPrice { get; set; }
 
 		public NewPriceDTO(Guid itemId, float newPrice)
 		{
@@ -91,7 +102,7 @@ namespace ClientApi
 	{
 		public static readonly string StaticHeader = "UpdateAllItems";
 
-		public ItemDTO[]? Items;
+		public ItemDTO[]? Items { get; set; }
 
 		public UpdateAllResponse()
 			: base(StaticHeader)
@@ -104,8 +115,8 @@ namespace ClientApi
 	{
 		public static readonly string StaticHeader = "InflationChanged";
 
-		public float NewInflation;
-		public NewPriceDTO[]? NewPrices;
+		public float NewInflation { get; set; }
+		public NewPriceDTO[]? NewPrices { get; set; }
 
 		public InflationChangedResponse()
 			: base(StaticHeader)
@@ -119,8 +130,8 @@ namespace ClientApi
 	{
 		public static readonly string StaticHeader = "TransactionResponse";
 
-		public Guid TransactionId;
-		public bool Succeeded;
+		public Guid TransactionId { get; set; }
+		public bool Succeeded { get; set; }
 
 		public TransactionResponse()
 			: base(StaticHeader)

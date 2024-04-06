@@ -1,6 +1,6 @@
 using System;
 using System.Text;
-using ClientApi;
+using ConnectionApi;
 using Logic;
 
 namespace ServerPresentation

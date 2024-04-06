@@ -39,7 +39,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClientDataTest", "ClientDat
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClientLogicTest", "ClientLogicTest\ClientLogicTest.csproj", "{C6C0C302-19DB-458D-8259-61F76DB5D5C0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClientApi", "ClientApi\ClientApi.csproj", "{2EE44874-2B6B-441B-A2C3-C26B9AFF12F7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConnectionApi", "ConnectionApi\ConnectionApi.csproj", "{2EE44874-2B6B-441B-A2C3-C26B9AFF12F7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiModelGenerator", "ApiModelGenerator\ApiModelGenerator.csproj", "{0B0F0840-1D34-4D4A-87E7-17ECD53CA71E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -99,6 +101,10 @@ Global
 		{2EE44874-2B6B-441B-A2C3-C26B9AFF12F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2EE44874-2B6B-441B-A2C3-C26B9AFF12F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2EE44874-2B6B-441B-A2C3-C26B9AFF12F7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0B0F0840-1D34-4D4A-87E7-17ECD53CA71E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0B0F0840-1D34-4D4A-87E7-17ECD53CA71E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0B0F0840-1D34-4D4A-87E7-17ECD53CA71E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0B0F0840-1D34-4D4A-87E7-17ECD53CA71E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

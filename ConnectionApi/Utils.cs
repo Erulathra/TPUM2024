@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text;
 
-namespace ClientApi
+namespace ConnectionApi
 {
 	public static class Utils
 	{

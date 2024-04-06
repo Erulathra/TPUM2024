@@ -1,4 +1,4 @@
-﻿using ClientApi;
+﻿using ConnectionApi;
 using ClientData;
 
 namespace ClientDataTest
