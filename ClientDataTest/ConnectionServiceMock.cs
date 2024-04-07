@@ -28,18 +28,20 @@ namespace ClientDataTest
 
         public async Task SendAsync(string message)
         {
-            if (serializer.GetResponseHeader(message) == GetItemsCommand.StaticHeader)
+            if (serializer.GetResponseHeader(message) == ServerStatics.GetItemsCommandHeader)
             {
                 UpdateAllResponse response = new UpdateAllResponse();
-                response.Items = [new ItemDTO(new Guid("testId"), "TestItem", "TestDesc", "Potion", 10.0f, false)];
+                response.Header = ServerStatics.UpdateAllResponseHeader;
+                response.Items = [new ItemDTO { Id = new Guid("testId"), Name = "TestItem", Description = "TestDesc", Type = "Potion", Price = 10.0f, IsSold = false }];
                 OnMessage?.Invoke(serializer.Serialize(response));
             }
-            else if (serializer.GetResponseHeader(message) == SellItemCommand.StaticHeader)
+            else if (serializer.GetResponseHeader(message) == ServerStatics.SellItemCommandHeader)
             {
                 SellItemCommand sellItemCommand = serializer.Deserialize<SellItemCommand>(message);
                 lastSoldGuid = sellItemCommand.ItemID;
 
                 TransactionResponse response = new TransactionResponse();
+                response.Header = ServerStatics.TransactionResponseHeader;
                 response.Succeeded = true;
                 OnMessage?.Invoke(serializer.Serialize(response));
             }
@@ -55,14 +57,14 @@ namespace ClientDataTest
         public void MockInflationChanged(List<IItem> items, float newInflation)
         {
             InflationChangedResponse response = new InflationChangedResponse();
+            response.Header = ServerStatics.InflationChangedResponseHeader;
             response.NewInflation = newInflation;
 
             NewPriceDTO[] newPriceDTOs = new NewPriceDTO[items.Count];
             int i = 0;
             foreach (IItem item in items)
             {
-                newPriceDTOs[i].ItemID = item.Id;
-                newPriceDTOs[i].NewPrice = item.Price * newInflation;
+                newPriceDTOs[i] = new NewPriceDTO {ItemID = item.Id, NewPrice = item.Price * newInflation};
                 i++;
             }
             response.NewPrices = newPriceDTOs;
@@ -73,6 +75,7 @@ namespace ClientDataTest
         public void MockUpdateAll(ItemDTO[] items)
         {
             UpdateAllResponse response = new UpdateAllResponse();
+            response.Header = ServerStatics.UpdateAllResponseHeader;
             response.Items = items;
             OnMessage?.Invoke(serializer.Serialize(response));
         }

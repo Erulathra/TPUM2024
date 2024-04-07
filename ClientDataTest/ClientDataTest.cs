@@ -1,6 +1,5 @@
 using ConnectionApi;
 using ClientData;
-using NuGet.Frameworks;
 
 namespace ClientDataTest;
 
@@ -13,17 +12,17 @@ public class ClientDataTest
 	public void PrepareData()
 	{
         connectionService.MockUpdateAll([
-			new ItemDTO(Guid.NewGuid(), "n1", "d", "Potion", 10.0f, false),
-            new ItemDTO(Guid.NewGuid(), "n2", "d", "Armor", 30.0f, false)
+            new ItemDTO{Id = Guid.NewGuid(), Name = "n1", Description = "d", Type = "Potion", Price = 10.0f, IsSold = false},
+            new ItemDTO{Id = Guid.NewGuid(), Name = "n2", Description = "d", Type = "Armor", Price = 30.0f, IsSold = false}
 		]);
     }
 
 	[TestMethod]
 	public void UpdateAllTest()
 	{
-		ItemDTO[] itemDTOs = [
-			new ItemDTO(Guid.NewGuid(), "n1", "d", "Potion", 10.0f, false),
-			new ItemDTO(Guid.NewGuid(), "n2", "d", "Armor", 30.0f, false)
+        ItemDTO[] itemDTOs = [
+			new ItemDTO{Id = Guid.NewGuid(), Name = "n1", Description = "d", Type = "Potion", Price = 10.0f, IsSold = false },
+			new ItemDTO{Id = Guid.NewGuid(), Name = "n2", Description = "d", Type = "Armor", Price = 30.0f, IsSold = false }
 		];
 
 		connectionService.MockUpdateAll(itemDTOs);
@@ -61,9 +60,9 @@ public class ClientDataTest
 	{
 		Guid sellGuid = Guid.NewGuid();
         connectionService.MockUpdateAll([
-			new ItemDTO(sellGuid, "n1", "d", "Potion", 10.0f, false),
-			new ItemDTO(Guid.NewGuid(), "n2", "d", "Armor", 30.0f, false)
-		]);
+            new ItemDTO{Id = sellGuid, Name = "n1", Description = "d", Type = "Potion", Price = 10.0f, IsSold = false },
+            new ItemDTO{Id = Guid.NewGuid(), Name = "n2", Description = "d", Type = "Armor", Price = 30.0f, IsSold = false }
+        ]);
 
 		await data.GetWarehouse().SellItem(sellGuid);
 

@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 
 namespace ConnectionApi
 {
-	internal static class ServerStatics
+	public static class ServerStatics
 	{
 		public static readonly string GetItemsCommandHeader = "GetItems";
 		public static readonly string SellItemCommandHeader = "SellItem";
@@ -16,20 +16,20 @@ namespace ConnectionApi
 	}
 	
 	[GeneratedCode("NJsonSchema", "11.0.0.0 (Newtonsoft.Json v13.0.0.0)")]
-	internal abstract class ServerCommand
+	public abstract class ServerCommand
 	{
 		[JsonProperty("Header", Required = Required.DisallowNull, NullValueHandling = NullValueHandling.Ignore)]
 		public string Header { get; set; }
 	}
 
     [GeneratedCode("NJsonSchema", "11.0.0.0 (Newtonsoft.Json v13.0.0.0)")]
-    internal partial class GetItemsCommand : ServerCommand
+    public partial class GetItemsCommand : ServerCommand
     {
 
     }
 
 	[GeneratedCode("NJsonSchema", "11.0.0.0 (Newtonsoft.Json v13.0.0.0)")]
-	internal class SellItemCommand : ServerCommand
+	public class SellItemCommand : ServerCommand
 	{
 		[JsonProperty("TransactionID", Required = Required.DisallowNull, NullValueHandling = NullValueHandling.Ignore)]
 		public Guid TransactionID { get; set; }
@@ -39,7 +39,7 @@ namespace ConnectionApi
 	}
 
 	[GeneratedCode("NJsonSchema", "11.0.0.0 (Newtonsoft.Json v13.0.0.0)")]
-	internal class ItemDTO
+	public class ItemDTO
 	{
 		[JsonProperty("Id", Required = Required.DisallowNull, NullValueHandling = NullValueHandling.Ignore)]
 		public Guid Id { get; set; }
@@ -62,7 +62,7 @@ namespace ConnectionApi
 
 
 	[GeneratedCode("NJsonSchema", "11.0.0.0 (Newtonsoft.Json v13.0.0.0)")]
-	internal class NewPriceDTO
+	public class NewPriceDTO
 	{
 		[JsonProperty("ItemID", Required = Required.DisallowNull, NullValueHandling = NullValueHandling.Ignore)]
 		public Guid ItemID { get; set; }
@@ -73,21 +73,21 @@ namespace ConnectionApi
 
 
 	[GeneratedCode("NJsonSchema", "11.0.0.0 (Newtonsoft.Json v13.0.0.0)")]
-	internal abstract class ServerResponse
+	public abstract class ServerResponse
 	{
 		[JsonProperty("Header", Required = Required.DisallowNull, NullValueHandling = NullValueHandling.Ignore)]
 		public string Header { get; set; }
 	}
 
 	[GeneratedCode("NJsonSchema", "11.0.0.0 (Newtonsoft.Json v13.0.0.0)")]
-	internal class UpdateAllResponse : ServerResponse
+	public class UpdateAllResponse : ServerResponse
 	{
 		[JsonProperty("Items", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
 		public ICollection<ItemDTO> Items { get; set; }
 	}
 
 	[GeneratedCode("NJsonSchema", "11.0.0.0 (Newtonsoft.Json v13.0.0.0)")]
-	internal class InflationChangedResponse : ServerResponse
+	public class InflationChangedResponse : ServerResponse
 	{
 		[JsonProperty("NewInflation", Required = Required.DisallowNull, NullValueHandling = NullValueHandling.Ignore)]
 		public float NewInflation { get; set; }
@@ -97,7 +97,7 @@ namespace ConnectionApi
 	}
 
 	[GeneratedCode("NJsonSchema", "11.0.0.0 (Newtonsoft.Json v13.0.0.0)")]
-	internal class TransactionResponse : ServerResponse
+	public class TransactionResponse : ServerResponse
 	{
 		[JsonProperty("TransactionId", Required = Required.DisallowNull, NullValueHandling = NullValueHandling.Ignore)]
 		public Guid TransactionId { get; set; }
